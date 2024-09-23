@@ -14,6 +14,8 @@
 */
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 
 #include "klustering.h"
 
@@ -25,9 +27,17 @@ int main(const int argc, const char* argv[])
 	FILE* csvOpen = NULL;
 	Point data[MAX_BUFFER] = { 0.0, 0.0, 0 };
 	char str_tmp[MAX_BUFFER];
-	int selectX = 0, selectY = 1;		// selectX = sepal length, selectY = sepal Width
-	int n_clusters = 0, i;					// 군집의 개수
-	int max_index = 0;
+	const int selectX = 0, selectY = 1;		// selectX = sepal length, selectY = sepal Width
+	int max_index = 0, i;
+	float temp = 0;
+	int n_clusters;
+	Centroid centroid[3] = {				// 랜덤의 위치에서 생성된 군집의 개수 3
+		{ 4.36, 1.9 },
+		{ 7.03, 7.29 },
+		{ 3.73, 8.18 }
+	};
+
+	srand((unsigned int)time(NULL));
 
 	if (fopen_s(&csvOpen, argv[1], "r") != NULL)
 	{
@@ -39,9 +49,15 @@ int main(const int argc, const char* argv[])
 	while (!feof(csvOpen))
 	{
 		fgets(str_tmp, MAX_BUFFER, csvOpen);
-		dataToArray(str_tmp, selectX, selectY, max_index);
+		dataToArray(str_tmp, selectX, selectY, data, max_index);
 		max_index++;
 	}
+	
+	clustering(data, max_index, centroid, 3);
+
+	for (i = 0; i < max_index; i++)
+		printf("i: %d, %d\n", i, data[i].centroid_num);
+
 
 
 	fclose(csvOpen);

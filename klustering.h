@@ -12,6 +12,8 @@ typedef struct {
 	float y;
 } Centroid;
 
-void dataToArray(const char* str_tmp, const int x, const int y, const int index);
+void dataToArray(const char* str_tmp, const int x, const int y, Point* data, const int index);		// CSV의 모든 데이터들을 Point 배열로 넣기
+void clustering(Point* data, const int point_arr_max, const Centroid* centroid, const int n_cluster);
+float euclideanDistance(Point data, Centroid centroid);
 
 #endif // !__KLUSTERING_H__
