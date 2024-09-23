@@ -6,6 +6,8 @@
 
 #include "klustering.h"
 
+#define MAX_NUM_FOR_MIN 100
+
 // CSV에 있는 데이터를 배열로 옮기기
 void dataToArray(const char* str_tmp, const int x, const int y, Point* data, const int index)
 {
@@ -30,7 +32,7 @@ void dataToArray(const char* str_tmp, const int x, const int y, Point* data, con
 void clustering(Point* data, const int point_arr_max, const Centroid* centroid, const int n_cluster)
 {
 	int i, j, k;
-	float min = 10.0;
+	float min = MAX_NUM_FOR_MIN;
 	int numbering = 0;			// 몇번째 centroid 인지
 	float* centroid_clustering = (float*)calloc(n_cluster, sizeof(float));
 
@@ -60,14 +62,14 @@ void clustering(Point* data, const int point_arr_max, const Centroid* centroid, 
 			printf("j: %d\n", j);
 			if (centroid_clustering[j] < min)
 			{
-				numbering = j;
 				min = centroid_clustering[j];
+				numbering = j;
 			}
 			printf("j: %d, centroid_clustering[j]: %f, min: %f\n"
 				, j, centroid_clustering[j], min);
 		}
 		
-		min = 10.0;
+		min = MAX_NUM_FOR_MIN;
 		data[i].centroid_num = numbering;
 	}
 

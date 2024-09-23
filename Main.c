@@ -12,7 +12,7 @@
 3. 클러스터링	
 4. 
 */
-
+#define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -27,15 +27,10 @@ int main(const int argc, const char* argv[])
 	FILE* csvOpen = NULL;
 	Point data[MAX_BUFFER] = { 0.0, 0.0, 0 };
 	char str_tmp[MAX_BUFFER];
-	const int selectX = 0, selectY = 1;		// selectX = sepal length, selectY = sepal Width
-	int max_index = 0, i;
-	float temp = 0;
-	int n_clusters;
-	Centroid centroid[3] = {				// 랜덤의 위치에서 생성된 군집의 개수 3
-		{ 4.36, 1.9 },
-		{ 7.03, 7.29 },
-		{ 3.73, 8.18 }
-	};
+	const int selectX = 0, selectY = 1;			// selectX = sepal length, selectY = sepal Width
+	int max_index = 0, i;						// max_index: 배열 max_index의 최대값
+	int n_clusters;								// 군집의 개수
+	Centroid* centroid;							// 랜덤의 위치에서 생성된
 
 	srand((unsigned int)time(NULL));
 
@@ -43,6 +38,19 @@ int main(const int argc, const char* argv[])
 	{
 		printf("파일을 못 찾았습니다.");
 		return -1;
+	}
+
+	printf("n_clusters: ");
+	scanf("%d", &n_clusters);
+
+	centroid = (Centroid*)calloc(n_clusters, sizeof(Centroid));
+
+	if (centroid == NULL) return -1;
+
+	for (i = 0; i < n_clusters; i++)
+	{
+		centroid[i].x = (float) (rand() % 80 + 4) / 10;
+		centroid[i].y = (float) (rand() % 40 + 2) / 10;
 	}
 
 	fgets(str_tmp, MAX_BUFFER, csvOpen);
@@ -53,13 +61,12 @@ int main(const int argc, const char* argv[])
 		max_index++;
 	}
 	
-	clustering(data, max_index, centroid, 3);
+	clustering(data, max_index, centroid, n_clusters);
 
 	for (i = 0; i < max_index; i++)
 		printf("i: %d, %d\n", i, data[i].centroid_num);
 
-
-
+	free(centroid);
 	fclose(csvOpen);
 	return 0;
 }
