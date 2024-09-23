@@ -18,7 +18,7 @@ void terminalClear(void)
 	system("cls");
 }
 
-void terminalSizeInit(const int x, const int y)
+void terminalSize(const int x, const int y)
 {
 	char command[NUM_TO_MAX_BUFFER];
 	char cols[NUM_TO_MAX_BUFFER], lines[NUM_TO_MAX_BUFFER];

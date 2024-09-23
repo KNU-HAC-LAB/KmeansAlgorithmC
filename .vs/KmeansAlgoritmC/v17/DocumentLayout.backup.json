@@ -1,0 +1,71 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\UseAtLab\\repos\\KmeansAlgoritmC\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{FD48916C-FFA2-4374-A3C7-357E09DA8259}|KmeansAlgoritmC.vcxproj|C:\\UseAtLab\\repos\\KmeansAlgoritmC\\Klustering.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{FD48916C-FFA2-4374-A3C7-357E09DA8259}|KmeansAlgoritmC.vcxproj|solutionrelative:Klustering.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FD48916C-FFA2-4374-A3C7-357E09DA8259}|KmeansAlgoritmC.vcxproj|C:\\UseAtLab\\repos\\KmeansAlgoritmC\\klustering.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{FD48916C-FFA2-4374-A3C7-357E09DA8259}|KmeansAlgoritmC.vcxproj|solutionrelative:klustering.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FD48916C-FFA2-4374-A3C7-357E09DA8259}|KmeansAlgoritmC.vcxproj|C:\\UseAtLab\\repos\\KmeansAlgoritmC\\Main.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{FD48916C-FFA2-4374-A3C7-357E09DA8259}|KmeansAlgoritmC.vcxproj|solutionrelative:Main.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "klustering.h",
+              "DocumentMoniker": "C:\\UseAtLab\\repos\\KmeansAlgoritmC\\klustering.h",
+              "RelativeDocumentMoniker": "klustering.h",
+              "ToolTip": "C:\\UseAtLab\\repos\\KmeansAlgoritmC\\klustering.h",
+              "RelativeToolTip": "klustering.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAA/AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2024-09-23T07:29:19.651Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Klustering.c",
+              "DocumentMoniker": "C:\\UseAtLab\\repos\\KmeansAlgoritmC\\Klustering.c",
+              "RelativeDocumentMoniker": "Klustering.c",
+              "ToolTip": "C:\\UseAtLab\\repos\\KmeansAlgoritmC\\Klustering.c",
+              "RelativeToolTip": "Klustering.c",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
+              "WhenOpened": "2024-09-23T07:17:00.18Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Main.c",
+              "DocumentMoniker": "C:\\UseAtLab\\repos\\KmeansAlgoritmC\\Main.c",
+              "RelativeDocumentMoniker": "Main.c",
+              "ToolTip": "C:\\UseAtLab\\repos\\KmeansAlgoritmC\\Main.c",
+              "RelativeToolTip": "Main.c",
+              "ViewState": "AgIAABsAAAAAAAAAAAAIwCkAAAAyAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
+              "WhenOpened": "2024-09-21T03:04:56.402Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

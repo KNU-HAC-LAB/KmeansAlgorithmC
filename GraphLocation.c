@@ -1,5 +1,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
+#include <stdlib.h>
+#include <conio.h>
 #include <string.h>
 
 #include "graphLocation.h"
@@ -10,7 +12,7 @@
 int selectTheXYData(const char* str_tmp)
 {
 	char* token = strtok(str_tmp, ",");
-	int i = 0;
+	int i = 0, key, x = 12, y = 1;
 
 	while (token != NULL)
 	{
@@ -18,23 +20,52 @@ int selectTheXYData(const char* str_tmp)
 		printf("%d. %s\n", i, token);
 		token = strtok(NULL, ",");
 	};
+
+	gotoxy(x, y);
+	printf("¡Ü");
+	while (1)
+	{
+		if (_kbhit())
+		{
+			printf("\b\b  ");
+			key = _getch();
+			switch (key)
+			{
+			case 'w':
+				gotoxy(x, y--);
+				printf("¡Ü");
+				break;
+			case 's':
+				gotoxy(x, y++);
+				printf("¡Ü");
+				break;
+			default:
+				continue;
+			}
+		}
+		
+	}
 	return 0;
 }
 
-void cordinatesInit(const int size)
+void figurePointing(const char* str_tmp, const int x, const int y)
 {
-	int i;
-	
-	terminalSizeInit(size * 2, size);
+	char* token = strtok(str_tmp, ",");
+	float pointX = 0.0, pointY = 0.0;
+	int index = 0;
 
-	for (i = 0; i < size - 1; i++)
-		printf("¦­\n");
-	printf("¦±");
-	for (i = 2; i < size * 2; i++)
-		printf("¦¬");
-}
-
-void figurePointing(const char* str_tmp)
-{
-
+	while (token != NULL)
+	{
+		if (index > 5)
+			index = 0;
+		if (index == x)
+			pointX = atof(token);
+		if (index == y)
+			pointY = atof(token);
+		gotoxy(pointX * 10, pointY * 10);
+		printf("¡Û");
+		//printf("pointX: %f, pointY: %f\n", pointX, pointY);
+		token = strtok(NULL, ",");
+		index++;
+	};
 }

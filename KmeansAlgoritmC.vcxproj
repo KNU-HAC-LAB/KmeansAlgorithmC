@@ -128,11 +128,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="GraphLocation.c" />
+    <ClCompile Include="Klustering.c" />
     <ClCompile Include="Main.c" />
     <ClCompile Include="Terminal.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="graphLocation.h" />
+    <ClInclude Include="klustering.h" />
     <ClInclude Include="terminal.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
