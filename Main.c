@@ -63,12 +63,18 @@ int main(const int argc, const char* argv[])
 		centroid[i].y = data[temp].y;
 		printf("i: %d, centroid[i].x: %f, centroid[i].y: %f\n", i, centroid[i].x, centroid[i].y);
 	}
-	
+
 	clustering(data, max_index, centroid, n_clusters);
 
-	printf("Centroid_num: \n\n");
+	/*printf("Centroid_num: \n\n");
 	for (i = 0; i < max_index; i++)
-		printf("i: %d, %d\n", i, data[i].centroid_num);
+		printf("i: %d, %d\n", i, data[i].centroid_num);*/
+
+	toCentroidCenter(data, max_index, centroid, n_clusters);
+
+	for (i = 0; i < n_clusters; i++)
+		printf("i: %d, centroid[i].x: %f, centroid[i].y: %f\n", 
+			i, centroid[i].x, centroid[i].y);
 
 	free(centroid);
 	fclose(csvOpen);
