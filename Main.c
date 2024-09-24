@@ -31,6 +31,7 @@ int main(const int argc, const char* argv[])
 	int max_index = 0, i;						// max_index: 배열 max_index의 최대값
 	int n_clusters;								// 군집의 개수
 	Centroid* centroid;							// 랜덤의 위치에서 생성된
+	int temp = 0;
 
 	srand((unsigned int)time(NULL));
 
@@ -38,6 +39,14 @@ int main(const int argc, const char* argv[])
 	{
 		printf("파일을 못 찾았습니다.");
 		return -1;
+	}
+
+	fgets(str_tmp, MAX_BUFFER, csvOpen);
+	while (!feof(csvOpen))
+	{
+		fgets(str_tmp, MAX_BUFFER, csvOpen);
+		dataToArray(str_tmp, selectX, selectY, data, max_index);
+		max_index++;
 	}
 
 	printf("n_clusters: ");
@@ -49,20 +58,15 @@ int main(const int argc, const char* argv[])
 
 	for (i = 0; i < n_clusters; i++)
 	{
-		centroid[i].x = (float) (rand() % 80 + 4) / 10;
-		centroid[i].y = (float) (rand() % 40 + 2) / 10;
-	}
-
-	fgets(str_tmp, MAX_BUFFER, csvOpen);
-	while (!feof(csvOpen))
-	{
-		fgets(str_tmp, MAX_BUFFER, csvOpen);
-		dataToArray(str_tmp, selectX, selectY, data, max_index);
-		max_index++;
+		temp = rand() % max_index;
+		centroid[i].x = data[temp].x;
+		centroid[i].y = data[temp].y;
+		printf("i: %d, centroid[i].x: %f, centroid[i].y: %f\n", i, centroid[i].x, centroid[i].y);
 	}
 	
 	clustering(data, max_index, centroid, n_clusters);
 
+	printf("Centroid_num: \n\n");
 	for (i = 0; i < max_index; i++)
 		printf("i: %d, %d\n", i, data[i].centroid_num);
 

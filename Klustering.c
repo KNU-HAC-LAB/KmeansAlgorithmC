@@ -33,8 +33,8 @@ void clustering(Point* data, const int point_arr_max, const Centroid* centroid, 
 {
 	int i, j, k;
 	float min = MAX_NUM_FOR_MIN;
-	int numbering = 0;			// 몇번째 centroid 인지
-	float* centroid_clustering = (float*)calloc(n_cluster, sizeof(float));
+	int numbering = 0;														// 몇번째 centroid 인지
+	float* centroid_clustering = (float*)calloc(n_cluster, sizeof(float));	// 유클리드 거리 계산 후 저장하기
 
 	/*for (i = 0; i < point_arr_max; i++)
 	{
@@ -50,7 +50,6 @@ void clustering(Point* data, const int point_arr_max, const Centroid* centroid, 
 		printf("i: %d\n", i);
 		for (j = 0; j < n_cluster; j++)
 		{
-			printf("j: %d\n", j);
 			centroid_clustering[j] = euclideanDistance(data[i], centroid[j]);
 			printf("centroid_clustering[j]: %f\n"
 				, centroid_clustering[j]);
@@ -59,14 +58,14 @@ void clustering(Point* data, const int point_arr_max, const Centroid* centroid, 
 		printf("\n");
 		for (j = 0; j < n_cluster; j++)
 		{
-			printf("j: %d\n", j);
+			printf("second. j: %d\n", j);
 			if (centroid_clustering[j] < min)
 			{
 				min = centroid_clustering[j];
 				numbering = j;
 			}
-			printf("j: %d, centroid_clustering[j]: %f, min: %f\n"
-				, j, centroid_clustering[j], min);
+			printf("centroid_clustering[j]: %f, min: %f, numbering: %d\n"
+				, centroid_clustering[j], min, numbering);
 		}
 		
 		min = MAX_NUM_FOR_MIN;
@@ -76,9 +75,9 @@ void clustering(Point* data, const int point_arr_max, const Centroid* centroid, 
 	free(centroid_clustering);
 }
 
-// 유클리드 거리 계산
+// 유클리디안 거리 계산
 float euclideanDistance(Point data, Centroid centroid)
 {
 	printf("data.x: %f, data.y: %f, centroid.x: %f, centroid.y: %f\n", data.x, data.y, centroid.x, centroid.y);
-	return sqrt(pow(data.x - data.y, 2) + pow(centroid.x + centroid.y, 2));
+	return sqrt(pow(data.x - centroid.x, 2) + pow(data.y - centroid.y, 2));
 }
