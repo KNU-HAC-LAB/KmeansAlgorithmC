@@ -6,15 +6,16 @@
  */
 
 /*
-순서: 
-1. K-means를 위한 CSV데이터 받기	Main.c
-2. 데이터를 gotoxy로 시각화	Terminal.c
-3. 클러스터링	
-4. 
-*/
+ * 순서: 
+ * 1. K-means를 위한 CSV데이터 받기	Main.c
+ * 2. 데이터를 gotoxy로 시각화	Terminal.h
+ * 3. 클러스터링				Clustering.h
+ */
+
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <time.h>
 
 #include "klustering.h"
@@ -30,7 +31,8 @@ int main(const int argc, const char* argv[])
 	const int selectX = 0, selectY = 1;			// selectX = sepal length, selectY = sepal Width
 	int max_index = 0, i;						// max_index: 배열 max_index의 최대값
 	int n_clusters;								// 군집의 개수
-	Centroid* centroid;							// 랜덤의 위치에서 생성된
+	Centroid* centroid, * centroid_before;		// 랜덤의 위치 생성할 Centroid, 복사할 Centroid
+	int refresh_times = 0;						// 갱신 횟수
 	int temp = 0;
 
 	srand((unsigned int)time(NULL));
@@ -56,7 +58,7 @@ int main(const int argc, const char* argv[])
 
 	if (centroid == NULL) return -1;
 
-	for (i = 0; i < n_clusters; i++)
+	for (i = 0; i < n_clusters; i++)		// 무작위 데이터 중의 하나로 시작 점을 설정
 	{
 		temp = rand() % max_index;
 		centroid[i].x = data[temp].x;
@@ -64,18 +66,21 @@ int main(const int argc, const char* argv[])
 		printf("i: %d, centroid[i].x: %f, centroid[i].y: %f\n", i, centroid[i].x, centroid[i].y);
 	}
 
-	clustering(data, max_index, centroid, n_clusters);
+	while (1) {
+		centroid_before = centroid_copy(centroid, n_clusters);
+		clustering(data, max_index, centroid, n_clusters);
+		toCentroidCenter(data, max_index, centroid, n_clusters);
+		refresh_times++;
+		if (checkDoesCentroidIsSameWithBefore(centroid, centroid_before, n_clusters))
+			break;
+		free(centroid_before);
+	}
 
-	/*printf("Centroid_num: \n\n");
-	for (i = 0; i < max_index; i++)
-		printf("i: %d, %d\n", i, data[i].centroid_num);*/
-
-	toCentroidCenter(data, max_index, centroid, n_clusters);
-
+	printf("refresh_times: %d\n", refresh_times);
 	for (i = 0; i < n_clusters; i++)
-		printf("i: %d, centroid[i].x: %f, centroid[i].y: %f\n", 
-			i, centroid[i].x, centroid[i].y);
+		printf("centroid[%d].x: %f, centroid[%d].y: %f\n", i, centroid[i].x, i, centroid[i].y);
 
+	free(centroid_before);
 	free(centroid);
 	fclose(csvOpen);
 	return 0;

@@ -9,7 +9,12 @@
 #define MAX_NUM_FOR_MIN 100
 
 // CSV에 있는 데이터를 배열로 옮기기
-void dataToArray(const char* str_tmp, const int x, const int y, Point* data, const int index)
+void dataToArray(
+	const char* str_tmp,
+	const int x,
+	const int y,
+	Point* data,
+	const int index)
 {
 	char* token = strtok(str_tmp, ",");
 	float pointX = 0.0, pointY = 0.0;
@@ -29,7 +34,11 @@ void dataToArray(const char* str_tmp, const int x, const int y, Point* data, con
 }
 
 // 클러스터링 코드
-void clustering(Point* data, const int data_arr_max, const Centroid* centroid, const int n_cluster)
+void clustering(
+	Point* data,
+	const int data_arr_max,
+	const Centroid* centroid,
+	const int n_cluster)
 {
 	int i, j, k;
 	float min = MAX_NUM_FOR_MIN;
@@ -81,7 +90,11 @@ float euclideanDistance(Point data, Centroid centroid)
 }
 
 // 중심으로 위치 갱신
-void toCentroidCenter(Point* data, const int data_arr_max, Centroid* centroid, const int n_cluster)
+void toCentroidCenter(
+	Point* data,
+	const int data_arr_max,
+	Centroid* centroid,
+	const int n_cluster)
 {
 	Point* centroid_to_center = (Point*)calloc(n_cluster, sizeof(Point));
 	int i;
@@ -98,6 +111,7 @@ void toCentroidCenter(Point* data, const int data_arr_max, Centroid* centroid, c
 			i, data[i].x, data[i].centroid_num, centroid_to_center[data[i].centroid_num].x, data[i].y, data[i].centroid_num, centroid_to_center[data[i].centroid_num].y);*/
 	}
 
+	// 평균 계산
 	for (i = 0; i < n_cluster; i++)
 	{
 		centroid[i].x = centroid_to_center[i].x / centroid_to_center[i].centroid_num;
@@ -105,4 +119,41 @@ void toCentroidCenter(Point* data, const int data_arr_max, Centroid* centroid, c
 	}
 
 	free(centroid_to_center);
+}
+
+Centroid* centroid_copy(Centroid* centroid, const int n_cluster)
+{
+	Centroid* copy = (Centroid*)malloc(sizeof(Centroid) * n_cluster);
+	int i;
+
+	if (centroid == NULL) return -1;
+
+	for (i = 0; i < n_cluster; i++)
+	{
+		copy[i].x = centroid[i].x;
+		copy[i].y = centroid[i].y;
+		//printf("i: %d, copy[i].x: %f, copy[i].y: %f\n", i, copy[i].x, copy[i].y);
+	}
+
+	return copy;
+}
+
+// Centroid 값이 반복 전 과의 값이 동일한 지 확인
+// 1: 일치 값이므로 k-means 종료
+// 0: 비일치 값이므로 cluster 다시 실행
+int checkDoesCentroidIsSameWithBefore(
+	Centroid* centroid,
+	Centroid* centroid_before,
+	const int n_cluster)
+{
+	int i, check = 0;
+
+	for (i = 0; i < n_cluster; i++)
+	{
+		printf("i: %d, centroid[i].x: %f, centroid[i].y: %f, centroid_before[i].x: %f, centroid_before[i].y: %f\n"
+			, i, centroid[i].x, centroid[i].y, centroid_before[i].x, centroid_before[i].y);
+		if (centroid[i].x == centroid_before[i].x && centroid[i].y == centroid_before[i].y)
+			check = 1;
+	}
+	return check;
 }
