@@ -34,6 +34,7 @@ int main(const int argc, const char* argv[])
 	Centroid* centroid, * centroid_before;		// 랜덤의 위치 생성할 Centroid, 복사할 Centroid
 	int refresh_times = 0;						// 갱신 횟수
 	int temp = 0;
+	int* result;
 
 	srand((unsigned int)time(NULL));
 
@@ -66,6 +67,7 @@ int main(const int argc, const char* argv[])
 		printf("i: %d, centroid[i].x: %f, centroid[i].y: %f\n", i, centroid[i].x, centroid[i].y);
 	}
 
+	// 전 위치에 동일할 때까지 반복
 	while (1) {
 		centroid_before = centroid_copy(centroid, n_clusters);
 		clustering(data, max_index, centroid, n_clusters);
@@ -76,10 +78,15 @@ int main(const int argc, const char* argv[])
 		free(centroid_before);
 	}
 
+	result = (int*)calloc(n_clusters, sizeof(int));
 	printf("refresh_times: %d\n", refresh_times);
-	for (i = 0; i < n_clusters; i++)
-		printf("centroid[%d].x: %f, centroid[%d].y: %f\n", i, centroid[i].x, i, centroid[i].y);
+	for (i = 0; i < max_index; i++)
+		result[data[i].centroid_num]++;
 
+	for (i = 0; i < n_clusters; i++)
+		printf("%d: %d\n", i + 1, result[i]);
+
+	free(result);
 	free(centroid_before);
 	free(centroid);
 	fclose(csvOpen);
