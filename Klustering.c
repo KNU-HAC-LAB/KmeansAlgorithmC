@@ -45,34 +45,21 @@ void clustering(
 	int numbering = 0;														// 몇번째 centroid 인지
 	float* centroid_clustering = (float*)calloc(n_cluster, sizeof(float));	// 유클리드 거리 계산 후 저장하기
 
-	/*for (i = 0; i < data_arr_max; i++)
-	{
-		for (j = 0; j < n_cluster; j++)
-			printf("i: %d, j: %d, data[i].x: %f, data[i].y: %f, centroid[j].x: %f, centroid[j].y: %f\n"
-				, i, j, data[i].x, data[i].y, centroid[j].x, centroid[j].y);
-	}*/
-
 	if (centroid_clustering == NULL) return;
 
 	for (i = 0; i < data_arr_max; i++)
 	{
+		// 각 데이터의 위치와 centroid의 위치를 유클리드 거리로 계산
 		for (j = 0; j < n_cluster; j++)
-		{
 			centroid_clustering[j] = euclideanDistance(data[i], centroid[j]);
-			/*printf("centroid_clustering[j]: %f\n"
-				, centroid_clustering[j]);*/
-		}
 
 		for (j = 0; j < n_cluster; j++)
 		{
-			//printf("second. j: %d\n", j);
 			if (centroid_clustering[j] < min)
 			{
 				min = centroid_clustering[j];
 				numbering = j;
 			}
-			/*printf("centroid_clustering[j]: %f, min: %f, numbering: %d\n"
-				, centroid_clustering[j], min, numbering);*/
 		}
 		
 		min = MAX_NUM_FOR_MIN;
@@ -85,7 +72,6 @@ void clustering(
 // 유클리디안 거리 계산
 float euclideanDistance(Point data, Centroid centroid)
 {
-	/*printf("data.x: %f, data.y: %f, centroid.x: %f, centroid.y: %f\n", data.x, data.y, centroid.x, centroid.y);*/
 	return sqrt(pow(data.x - centroid.x, 2) + pow(data.y - centroid.y, 2));
 }
 
@@ -106,9 +92,6 @@ void toCentroidCenter(
 		centroid_to_center[data[i].centroid_num].x += data[i].x;
 		centroid_to_center[data[i].centroid_num].y += data[i].y;
 		centroid_to_center[data[i].centroid_num].centroid_num++;
-
-		/*printf("%d, data[i].x: %f, centroid_to_center[%d].x: %f, data[i].y: %f, centroid_to_center[%d].y : %f\n",
-			i, data[i].x, data[i].centroid_num, centroid_to_center[data[i].centroid_num].x, data[i].y, data[i].centroid_num, centroid_to_center[data[i].centroid_num].y);*/
 	}
 
 	// 평균 계산
@@ -121,24 +104,24 @@ void toCentroidCenter(
 	free(centroid_to_center);
 }
 
+// Centroid를 깊은 복사하여 전 값과 비교
 Centroid* centroid_copy(Centroid* centroid, const int n_cluster)
 {
 	Centroid* copy = (Centroid*)malloc(sizeof(Centroid) * n_cluster);
 	int i;
 
-	if (centroid == NULL) return -1;
+	if (copy == NULL) return -1;
 
 	for (i = 0; i < n_cluster; i++)
 	{
 		copy[i].x = centroid[i].x;
 		copy[i].y = centroid[i].y;
-		//printf("i: %d, copy[i].x: %f, copy[i].y: %f\n", i, copy[i].x, copy[i].y);
 	}
 
 	return copy;
 }
 
-// Centroid 값이 반복 전 과의 값이 동일한 지 확인
+// Centroid의 값이 반복하기 전의 값과 동일한 지 확인
 // 1: 일치 값이므로 k-means 종료
 // 0: 비일치 값이므로 cluster 다시 실행
 int checkDoesCentroidIsSameWithBefore(
@@ -150,10 +133,26 @@ int checkDoesCentroidIsSameWithBefore(
 
 	for (i = 0; i < n_cluster; i++)
 	{
-		printf("i: %d, centroid[i].x: %f, centroid[i].y: %f, centroid_before[i].x: %f, centroid_before[i].y: %f\n"
-			, i, centroid[i].x, centroid[i].y, centroid_before[i].x, centroid_before[i].y);
 		if (centroid[i].x == centroid_before[i].x && centroid[i].y == centroid_before[i].y)
 			check = 1;
 	}
 	return check;
+}
+
+// 결과 출력
+void result(const Point* data, const int data_arr_max, const Centroid* centroid, const int n_cluster)
+{
+	int* sum = (int*)calloc(n_cluster, sizeof(int));
+	int i;
+
+	if (sum == NULL) return -1;
+
+	//각 군집의 개체수
+	for (i = 0; i < data_arr_max; i++)
+		sum[data[i].centroid_num]++;
+
+	for (i = 0; i < n_cluster; i++)
+		printf("군집 번호: %d. 개체수: %d\n", i + 1, sum[i]);
+
+	free(sum);
 }

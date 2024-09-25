@@ -30,4 +30,6 @@ Centroid* centroid_copy(Centroid* centroid, const int n_cluster);
 // Centroid 값이 반복 전 과의 값이 동일한 지 확인
 int checkDoesCentroidIsSameWithBefore(Centroid* centroid, Centroid* centroid_before, const int n_cluster);
 
+void result(const Point* data, const int data_arr_max, const Centroid* centroid, const int n_cluster);
+
 #endif // !__KLUSTERING_H__
