@@ -8,8 +8,7 @@
 /*
  * 순서: 
  * 1. K-means를 위한 CSV데이터 받기	Main.c
- * 2. 데이터를 gotoxy로 시각화	Terminal.h
- * 3. 클러스터링				Clustering.h
+ * 2. 클러스터링				Clustering.h
  */
 
 #define _CRT_SECURE_NO_WARNINGS
@@ -36,6 +35,7 @@ int main(const int argc, const char* argv[])
 	Centroid* centroid, * centroid_before;		// 랜덤의 위치 생성할 Centroid, 복사할 Centroid
 	int refresh_times = 0;						// 갱신 횟수
 	int temp = 0;
+	clock_t start, end;
 
 	srand((unsigned int)time(NULL));
 
@@ -65,6 +65,7 @@ int main(const int argc, const char* argv[])
 	printf("n_clusters: ");
 	scanf("%d", &n_clusters);
 
+	start = clock();
 	centroid = (Centroid*)calloc(n_clusters, sizeof(Centroid));
 
 	if (centroid == NULL) return -1;
@@ -88,6 +89,8 @@ int main(const int argc, const char* argv[])
 	}
 
 	result(data, max_index, centroid, n_clusters, max_index);
+	end = clock();
+	printf("소요시간: %lf\n", (double)(end - start) / CLOCKS_PER_SEC);
 
 	free(centroid_before);
 	free(centroid);

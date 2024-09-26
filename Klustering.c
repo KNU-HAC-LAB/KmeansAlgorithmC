@@ -43,7 +43,7 @@ void clustering(
 	const Centroid* centroid,
 	const int n_cluster)
 {
-	int i, j, k;
+	int i, j;
 	float min = MAX_NUM_FOR_MIN;
 	int numbering = 0;														// 몇번째 centroid 인지
 	float* centroid_clustering = (float*)calloc(n_cluster, sizeof(float));	// 유클리드 거리 계산 후 저장하기
@@ -149,7 +149,7 @@ int checkDoesCentroidIsSameWithBefore(
 	return check;
 }
 
-// 한 데이터에 대한 각 클러스터의 실루엣 계수
+// 각각 데이터에 대한 실루엣 계수
 float* silhouette_Coefficient(
 	int index, const Point* data, const int data_arr_max, const int n_cluster)
 {
@@ -163,6 +163,7 @@ float* silhouette_Coefficient(
 
 	for (i = 0; i < n_cluster; i++)
 	{
+		// 이 데이터에 포함되어 있는 클러스터에서 하나 제외
 		if (chooseone.centroid_num == i)
 			cluster_silhoutte[i] = cluster_avg(1, chooseone, data, data_arr_max);
 		else
@@ -172,8 +173,7 @@ float* silhouette_Coefficient(
 	return cluster_silhoutte;
 }
 
-// 데이터와 클러스터 사이의 거리 평균
-// same_cluster: 같은 cluster 안에 있는 가?
+// 선택된 데이터와 다른 데이터 사이의 거리 평균
 float cluster_avg(int same_cluster, const Point choosen, const Point* data, const int data_arr_max)
 {
 	int i, max = 0;
@@ -222,12 +222,9 @@ void result(
 		}
 
 		pointSilhouette[i] = silhouette_calculate(cluster_avg[data[i].centroid_num], max);
-		/*printf("cluster_avg[%d]: %f, pointSilhouette[%d]: %f\n",
-			data[i].centroid_num, cluster_avg[data[i].centroid_num], i, pointSilhouette[i]);*/
 		avg += pointSilhouette[i];
 		free(cluster_avg);
 	}
-	printf("avg: %f\n", avg);
 
 	avg /= max_index;
 
