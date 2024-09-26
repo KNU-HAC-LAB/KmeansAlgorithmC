@@ -6,7 +6,10 @@
 
 #include "klustering.h"
 
+#define MAX(x,y) (((x)>(y))?(x):(y))
+
 #define MAX_NUM_FOR_MIN 100
+
 
 // CSV에 있는 데이터를 배열로 옮기기
 void dataToArray(
@@ -75,6 +78,13 @@ float euclideanDistance(Point data, Centroid centroid)
 	return sqrt(pow(data.x - centroid.x, 2) + pow(data.y - centroid.y, 2));
 }
 
+// 유클리디안 거리 계산
+float euclideanDistance_ForAnotherData(Point data, Point choosen_data)
+{
+	return sqrt(pow(data.x - choosen_data.x, 2) + pow(data.y - choosen_data.y, 2));
+}
+
+
 // 중심으로 위치 갱신
 void toCentroidCenter(
 	Point* data,
@@ -110,7 +120,7 @@ Centroid* centroid_copy(Centroid* centroid, const int n_cluster)
 	Centroid* copy = (Centroid*)malloc(sizeof(Centroid) * n_cluster);
 	int i;
 
-	if (copy == NULL) return -1;
+	if (copy == NULL) return;
 
 	for (i = 0; i < n_cluster; i++)
 	{
@@ -139,20 +149,98 @@ int checkDoesCentroidIsSameWithBefore(
 	return check;
 }
 
-// 결과 출력
-void result(const Point* data, const int data_arr_max, const Centroid* centroid, const int n_cluster)
+// 한 데이터에 대한 각 클러스터의 실루엣 계수
+float* silhouette_Coefficient(
+	int index, const Point* data, const int data_arr_max, const int n_cluster)
 {
-	int* sum = (int*)calloc(n_cluster, sizeof(int));
+	Point chooseone;
 	int i;
+	float* cluster_silhoutte = (float*)calloc(n_cluster, sizeof(float));
 
-	if (sum == NULL) return -1;
+	chooseone.x = data[index].x;
+	chooseone.y = data[index].y;
+	chooseone.centroid_num = data[index].centroid_num;
 
-	//각 군집의 개체수
+	for (i = 0; i < n_cluster; i++)
+	{
+		if (chooseone.centroid_num == i)
+			cluster_silhoutte[i] = cluster_avg(1, chooseone, data, data_arr_max);
+		else
+			cluster_silhoutte[i] = cluster_avg(0, chooseone, data, data_arr_max);
+	}
+
+	return cluster_silhoutte;
+}
+
+// 데이터와 클러스터 사이의 거리 평균
+// same_cluster: 같은 cluster 안에 있는 가?
+float cluster_avg(int same_cluster, const Point choosen, const Point* data, const int data_arr_max)
+{
+	int i, max = 0;
+	float avg = 0.0;
+
 	for (i = 0; i < data_arr_max; i++)
-		sum[data[i].centroid_num]++;
+	{
+		if (choosen.centroid_num != data[i].centroid_num)
+			continue;
+		avg += euclideanDistance_ForAnotherData(data[i], choosen);
+		max++;
+	}
+
+	if (same_cluster) max--;
+
+	avg /= max;
+	return avg;
+}
+
+// 결과 출력
+void result(
+	const Point* data,
+	const int data_arr_max,
+	const Centroid* centroid,
+	const int n_cluster,
+	const int max_index)
+{
+	int i, j, chooseone_sum = 0, theMaxCluster = 0;
+	int *sum = (int*)calloc(n_cluster, sizeof(int));
+	float* cluster_avg, max = MAX_NUM_FOR_MIN, avg = 0.0;
+	float* pointSilhouette = (float*)calloc(data_arr_max, sizeof(float));
+
+	// 실루엣 계수 a(i)
+	for (i = 0; i < data_arr_max; i++)
+	{
+		sum[data[i].centroid_num]++;	// 각 군집의 개체수
+		cluster_avg = silhouette_Coefficient(i, data, data_arr_max, n_cluster);
+
+		for (j = 0; j < n_cluster; j++)
+		{
+			if (data[i].centroid_num == j)
+				continue;
+
+			if (cluster_avg[j] < max)
+				max = cluster_avg[j];
+		}
+
+		pointSilhouette[i] = silhouette_calculate(cluster_avg[data[i].centroid_num], max);
+		/*printf("cluster_avg[%d]: %f, pointSilhouette[%d]: %f\n",
+			data[i].centroid_num, cluster_avg[data[i].centroid_num], i, pointSilhouette[i]);*/
+		avg += pointSilhouette[i];
+		free(cluster_avg);
+	}
+	printf("avg: %f\n", avg);
+
+	avg /= max_index;
 
 	for (i = 0; i < n_cluster; i++)
 		printf("군집 번호: %d. 개체수: %d\n", i + 1, sum[i]);
+	printf("실루엣 계수값: %f\n", avg);
 
+	free(pointSilhouette);
 	free(sum);
+}
+
+// 공식
+float silhouette_calculate(const float first_silhoutte, const float second_silhoutte)
+{
+	return (first_silhoutte - second_silhoutte) / MAX(first_silhoutte, second_silhoutte);
 }

@@ -23,12 +23,14 @@
 #define MAX_BUFFER 1024
 #define TERMINAL_MAX_SIZE 45
 
+void selectXY(const char* str_tmp);
+
 int main(const int argc, const char* argv[])
 {
 	FILE* csvOpen = NULL;
 	Point data[MAX_BUFFER] = { 0.0, 0.0, 0 };
 	char str_tmp[MAX_BUFFER];
-	const int selectX = 0, selectY = 1;			// selectX = sepal length, selectY = sepal Width
+	int selectX, selectY;						// selectX = sepal length, selectY = sepal Width
 	int max_index = 0, i;						// max_index: 배열 max_index의 최대값
 	int n_clusters;								// 군집의 개수
 	Centroid* centroid, * centroid_before;		// 랜덤의 위치 생성할 Centroid, 복사할 Centroid
@@ -44,6 +46,15 @@ int main(const int argc, const char* argv[])
 	}
 
 	fgets(str_tmp, MAX_BUFFER, csvOpen);
+	selectXY(str_tmp);
+	printf("X축에 사용할 데이터 선택: ");
+	scanf("%d", &selectX);
+	printf("Y축에 사용할 데이터 선택: ");
+	scanf("%d", &selectY);
+
+	selectX--;
+	selectY--;
+
 	while (!feof(csvOpen))
 	{
 		fgets(str_tmp, MAX_BUFFER, csvOpen);
@@ -76,10 +87,23 @@ int main(const int argc, const char* argv[])
 		free(centroid_before);
 	}
 
-	result(data, max_index, centroid, n_clusters);
+	result(data, max_index, centroid, n_clusters, max_index);
 
 	free(centroid_before);
 	free(centroid);
 	fclose(csvOpen);
 	return 0;
+}
+
+void selectXY(const char* str_tmp)
+{
+	char* token = strtok(str_tmp, ",");
+	int i = 0;
+
+	while (token != NULL)
+	{
+		i++;
+		printf("%d. %s\n", i, token);
+		token = strtok(NULL, ",");
+	}
 }

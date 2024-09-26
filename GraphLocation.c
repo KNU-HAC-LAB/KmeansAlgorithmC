@@ -13,6 +13,7 @@ int selectTheXYData(const char* str_tmp)
 {
 	char* token = strtok(str_tmp, ",");
 	int i = 0, key, x = 12, y = 1;
+	unsigned int select = 0;
 
 	while (token != NULL)
 	{
@@ -33,19 +34,21 @@ int selectTheXYData(const char* str_tmp)
 			{
 			case 'w':
 				gotoxy(x, y--);
-				printf("¡Ü");
+				select--;
 				break;
 			case 's':
 				gotoxy(x, y++);
-				printf("¡Ü");
+				select++;
 				break;
+			case 13:
+				printf("select: %d\n", select);
+				return select;
 			default:
-				continue;
+				break;
 			}
+			printf("¡Ü");
 		}
-		
 	}
-	return 0;
 }
 
 void figurePointing(const char* str_tmp, const int x, const int y)
