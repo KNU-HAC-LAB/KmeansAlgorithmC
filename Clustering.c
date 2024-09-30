@@ -4,12 +4,11 @@
 #include <math.h>
 #include <string.h>
 
-#include "klustering.h"
+#include "clustering.h"
 
 #define MAX(x,y) (((x)>(y))?(x):(y))
 
 #define MAX_NUM_FOR_MIN 100
-
 
 // CSV에 있는 데이터를 배열로 옮기기
 void dataToArray(
@@ -20,7 +19,6 @@ void dataToArray(
 	const int index)
 {
 	char* token = strtok(str_tmp, ",");
-	float pointX = 0.0, pointY = 0.0;
 	int i = 0;
 
 	while (token != NULL)
@@ -33,7 +31,6 @@ void dataToArray(
 		token = strtok(NULL, ",");
 		i++;
 	}
-	i = 0;
 }
 
 // 클러스터링 코드

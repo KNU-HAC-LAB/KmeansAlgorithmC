@@ -5,19 +5,15 @@
  * Main 파일
  */
 
-/*
- * 순서: 
- * 1. K-means를 위한 CSV데이터 받기	Main.c
- * 2. 클러스터링				Clustering.h
- */
-
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
 
-#include "klustering.h"
+#include "clustering.h"
+#include "terminal.h"
+#include "graphLocation.h"
 
 #define MAX_BUFFER 1024
 #define TERMINAL_MAX_SIZE 45
@@ -37,7 +33,7 @@ int main(const int argc, const char* argv[])
 	int temp = 0;
 	clock_t start, end;
 
-	srand((unsigned int)time(NULL));
+	//srand((unsigned int)time(NULL));			// seed 고정
 
 	if (fopen_s(&csvOpen, argv[1], "r") != NULL)
 	{
@@ -54,6 +50,8 @@ int main(const int argc, const char* argv[])
 
 	selectX--;
 	selectY--;
+
+	printf("selecX: %d, selectY: %d\n", selectX, selectY);
 
 	while (!feof(csvOpen))
 	{
@@ -90,7 +88,13 @@ int main(const int argc, const char* argv[])
 
 	result(data, max_index, centroid, n_clusters, max_index);
 	end = clock();
-	printf("소요시간: %lf\n", (double)(end - start) / CLOCKS_PER_SEC);
+	printf("소요시간: %0.2f 밀리초[ms]\n", (double)(end - start));
+
+	// 포인터를 터미널에 그리기
+	printf("데이터를 터미널에 그릴까요? (1을 입력 / 0으로 종료): ");
+	scanf("%d", &temp);
+	if (temp)
+		figurePointing(data, max_index, n_clusters);
 
 	free(centroid_before);
 	free(centroid);
