@@ -15,7 +15,7 @@
 #include "terminal.h"
 #include "graphLocation.h"
 
-#define MAX_BUFFER 1024
+#define MAX_BUFFER 9000							// 읽을 최대 줄
 #define TERMINAL_MAX_SIZE 45
 
 void selectXY(const char* str_tmp);
@@ -88,11 +88,16 @@ int main(const int argc, const char* argv[])
 	end = clock();
 	printf("소요시간: %f 밀리초[ms]\n", (double)(end - start) / CLOCKS_PER_SEC);
 
-	// 포인터를 터미널에 그리기
-	printf("데이터를 터미널에 그릴까요? (1을 입력 / 0으로 종료): ");
-	scanf("%d", &temp);
-	if (temp)
-		figurePointing(argv[1], data, max_index, n_clusters);
+	if (MAX_BUFFER <= 1500)
+	{
+		// 포인터를 터미널에 그리기
+		printf("데이터를 터미널에 그릴까요? (1을 입력 / 0으로 종료): ");
+		scanf("%d", &temp);
+		if (temp)
+			figurePointing(argv[1], data, max_index, n_clusters);
+	}
+	else
+		printf("데이터가 너무 많아 터미널에 그릴 수가 없습니다.\n");
 
 	free(centroid_before);
 	free(centroid);
