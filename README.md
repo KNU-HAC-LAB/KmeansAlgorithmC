@@ -8,7 +8,10 @@
 - kmeans 평가 중의 하나인 실루엣 분석을 구현
 - 결과를 출력
 #### 2. 실행 방법
-  $ .\KmeansAlgoritmC.exe iris.csv
+```
+.\KmeansAlgoritmC.exe iris.csv
+```
 
 #### 3. 실행 결과
 ![실행 결과](실행_결과.png)
+![실행 결과 2](실행_결과_2.png)

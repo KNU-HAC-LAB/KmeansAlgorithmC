@@ -51,8 +51,6 @@ int main(const int argc, const char* argv[])
 	selectX--;
 	selectY--;
 
-	printf("selecX: %d, selectY: %d\n", selectX, selectY);
-
 	while (!feof(csvOpen))
 	{
 		fgets(str_tmp, MAX_BUFFER, csvOpen);
@@ -88,13 +86,13 @@ int main(const int argc, const char* argv[])
 
 	result(data, max_index, centroid, n_clusters, max_index);
 	end = clock();
-	printf("소요시간: %0.2f 밀리초[ms]\n", (double)(end - start));
+	printf("소요시간: %f 밀리초[ms]\n", (double)(end - start) / CLOCKS_PER_SEC);
 
 	// 포인터를 터미널에 그리기
 	printf("데이터를 터미널에 그릴까요? (1을 입력 / 0으로 종료): ");
 	scanf("%d", &temp);
 	if (temp)
-		figurePointing(data, max_index, n_clusters);
+		figurePointing(argv[1], data, max_index, n_clusters);
 
 	free(centroid_before);
 	free(centroid);
