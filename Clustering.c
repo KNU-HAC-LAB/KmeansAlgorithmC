@@ -9,6 +9,38 @@
 #define MAX(x,y) (((x)>(y))?(x):(y))
 
 #define MAX_NUM_FOR_MIN 100
+#define MAX_BUFFER (1024)
+
+// stackoverflow를 방지하기 위해 data를 동적할당 하기
+int checkMaxIndex(FILE * csvOpen)
+{
+	int max_index = 0;
+	char str_tmp[MAX_BUFFER];
+	fgets(str_tmp, MAX_BUFFER, csvOpen);
+
+	while (!feof(csvOpen))
+	{
+		fgets(str_tmp, MAX_BUFFER, csvOpen);
+		max_index++;
+	}
+	return max_index;
+}
+
+void fopenMalloc(const FILE* csvOpen, Point* data, const char* argv, const int selectX, const int selectY)
+{
+	int max_index = 0;
+	char str_tmp[MAX_BUFFER];
+
+	fopen_s(&csvOpen, argv, "r");
+	fgets(str_tmp, MAX_BUFFER, csvOpen);
+
+	while (!feof(csvOpen))
+	{
+		fgets(str_tmp, MAX_BUFFER, csvOpen);
+		dataToArray(str_tmp, selectX, selectY, data, max_index);
+		max_index++;
+	}
+}
 
 // CSV에 있는 데이터를 배열로 옮기기
 void dataToArray(

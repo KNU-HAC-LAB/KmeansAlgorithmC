@@ -15,8 +15,7 @@
 #include "terminal.h"
 #include "graphLocation.h"
 
-#define MAX_BUFFER 100000							// 읽을 최대 줄
-//#define MAX_BUFFER 100000							// 읽을 최대 줄
+#define MAX_BUFFER 1024							// 읽을 최대 줄
 #define TERMINAL_MAX_SIZE 45
 
 void selectXY(const char* str_tmp);
@@ -24,15 +23,15 @@ void selectXY(const char* str_tmp);
 int main(const int argc, const char* argv[])
 {
 	FILE* csvOpen = NULL;
-	Point data[MAX_BUFFER] = { 0.0, 0.0, 0 };
-	char str_tmp[MAX_BUFFER];
+	Point *data;								// 포인트 데이터 (동적할당)
+	char str_tmp[MAX_BUFFER];					// 한 행의 최대 길이
 	int selectX, selectY;						// selectX = sepal length, selectY = sepal Width
 	int max_index = 0, i;						// max_index = 배열 max_index의 최대값
 	int n_clusters;								// 군집의 개수
 	Centroid* centroid, * centroid_before;		// 랜덤의 위치 생성할 Centroid, 복사할 Centroid
 	int refresh_times = 0;						// 갱신 횟수
 	int temp = 0;
-	clock_t start, end;
+	clock_t start, end;							// 소요시간 계산
 
 	//srand((unsigned int)time(NULL));			// seed 고정
 
@@ -51,18 +50,15 @@ int main(const int argc, const char* argv[])
 
 	selectX--;
 	selectY--;
-
-	while (!feof(csvOpen))
-	{
-		fgets(str_tmp, MAX_BUFFER, csvOpen);
-		dataToArray(str_tmp, selectX, selectY, data, max_index);
-		max_index++;
-	}
+	
+	max_index = checkMaxIndex(csvOpen);
+	data = (Point*)calloc(max_index + 1, sizeof(Point));
+	fopenMalloc(csvOpen, data, argv[1], selectX, selectY);
 
 	printf("n_clusters: ");
 	scanf("%d", &n_clusters);
 
-	start = clock();
+	start = clock();						// 총 소요시간 계산 시작
 	centroid = (Centroid*)calloc(n_clusters, sizeof(Centroid));
 
 	if (centroid == NULL) return -1;
@@ -86,7 +82,7 @@ int main(const int argc, const char* argv[])
 	}
 
 	result(data, max_index, centroid, n_clusters, max_index);
-	end = clock();
+	end = clock();							// 총 소요시간 계산 종료
 	printf("소요시간: %f 밀리초[ms]\n", (double)(end - start) / CLOCKS_PER_SEC);
 
 	if (max_index <= 1500)
@@ -100,6 +96,7 @@ int main(const int argc, const char* argv[])
 	else
 		printf("데이터가 너무 많아 터미널에 그릴 수가 없습니다.\n");
 
+	free(data);
 	free(centroid_before);
 	free(centroid);
 	fclose(csvOpen);
