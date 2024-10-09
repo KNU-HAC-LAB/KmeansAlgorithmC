@@ -15,7 +15,8 @@
 #include "terminal.h"
 #include "graphLocation.h"
 
-#define MAX_BUFFER 9000							// 읽을 최대 줄
+#define MAX_BUFFER 100000							// 읽을 최대 줄
+//#define MAX_BUFFER 100000							// 읽을 최대 줄
 #define TERMINAL_MAX_SIZE 45
 
 void selectXY(const char* str_tmp);
@@ -26,7 +27,7 @@ int main(const int argc, const char* argv[])
 	Point data[MAX_BUFFER] = { 0.0, 0.0, 0 };
 	char str_tmp[MAX_BUFFER];
 	int selectX, selectY;						// selectX = sepal length, selectY = sepal Width
-	int max_index = 0, i;						// max_index: 배열 max_index의 최대값
+	int max_index = 0, i;						// max_index = 배열 max_index의 최대값
 	int n_clusters;								// 군집의 개수
 	Centroid* centroid, * centroid_before;		// 랜덤의 위치 생성할 Centroid, 복사할 Centroid
 	int refresh_times = 0;						// 갱신 횟수
@@ -88,7 +89,7 @@ int main(const int argc, const char* argv[])
 	end = clock();
 	printf("소요시간: %f 밀리초[ms]\n", (double)(end - start) / CLOCKS_PER_SEC);
 
-	if (MAX_BUFFER <= 1500)
+	if (max_index <= 1500)
 	{
 		// 포인터를 터미널에 그리기
 		printf("데이터를 터미널에 그릴까요? (1을 입력 / 0으로 종료): ");
