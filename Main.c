@@ -33,7 +33,7 @@ int main(const int argc, const char* argv[])
 	int temp = 0;								// 중심점(centroid) 갯수
 	clock_t start, end;							// 소요시간 계산
 
-	//srand((unsigned int)time(NULL));			// seed값 고정
+	srand((unsigned int)time(NULL));			// seed값 고정
 
 	if (fopen_s(&csvOpen, argv[1], "r") != NULL)
 	{
@@ -73,7 +73,7 @@ int main(const int argc, const char* argv[])
 		centroid[n_clusters - 1].y = data[index].y;
 	}
 
-	printf("n_cluster: %d\n", n_clusters);
+	printf("전체 데이터 수: %d, n_cluster: %d\n", data_max_index, n_clusters);
 	// Centroid의 위치가 전 위치에 동일될 때까지 반복
 	while (1) {
 		centroid_before = centroid_copy(centroid, n_clusters);
