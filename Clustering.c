@@ -67,7 +67,7 @@ void dataToArray(
 
 int kmeans_pp_centroidnum(const Point* data, const int max_index, const Centroid* centroid, const int n_clusters)
 {
-	float min_num = 0;
+	float big_num = 0;
 	float* every_distance = (float*)calloc(max_index, sizeof(float));
 	float* px = (float*)calloc(max_index, sizeof(float));
 	float sum = 0.0;
@@ -81,25 +81,25 @@ int kmeans_pp_centroidnum(const Point* data, const int max_index, const Centroid
 	for (i = 0; i < max_index; i++)
 		every_distance[i] = pow(every_distance[i], 2);
 
-	// p(x) 값 얻기
+	// p(x) 값 계산
 	sum = px_sum(every_distance, max_index);
 	for (i = 0; i < max_index; i++)
 		px[i] = every_distance[i] / sum;
+	free(every_distance);
 
 	for (i = 0; i < max_index; i++)
 	{
-		if (px[i] > min_num)		// 제일 큰 숫자가 다음 Centroid 값이 된다.
+		if (px[i] > big_num)		// 제일 큰 p(x) 값이 다음 중심점 (Centroid)이 된다.
 		{
-			min_num = px[i];
+			big_num = px[i];
 			index = i;
 		}
 	}
-	free(every_distance);
 	free(px);
-
-	/*printf("n_clusters - 1: %d, centroid[n_clusters - 1].x: %f, centroid[n_clusters - 1].y: %f, index: %d, data[index].x: %f, data[index].y: %f\n", 
-		n_clusters - 1, centroid[n_clusters - 1].x, centroid[n_clusters - 1].y, index, data[index].x, data[index].y);*/
-
+	
+	/*printf("big_num: %f, n_clusters - 1: %d, centroid[n_clusters - 1].x: %.f, centroid[n_clusters - 1].y: %.f, index: %d, data[index].x: %.f, data[index].y: %.f\n", 
+		big_num, n_clusters - 1, centroid[n_clusters - 1].x, centroid[n_clusters - 1].y, index, data[index].x, data[index].y);*/
+	
 	// 전의 centroid 위치와 동일하면 종료, 아니면 계속 반복하여 centroid를 만들기
 	for (i = 0; i < n_clusters; i++)
 	{
@@ -109,7 +109,7 @@ int kmeans_pp_centroidnum(const Point* data, const int max_index, const Centroid
 	return index;
 }
 
-// px
+// sum of p(x)
 float px_sum(const float* every_dx_square, const int max_index)
 {
 	float sum = 0.0;
@@ -131,12 +131,9 @@ void clustering(
 	int numbering = 0;														// 몇번째 centroid 인지
 	float* centroid_clustering = (float*)calloc(n_clusters, sizeof(float));	// 유클리드 거리 계산 후 저장하기
 
-	if (centroid_clustering == NULL) return;
-
 	for (i = 0; i < data_arr_max; i++)
 	{
 		// 각 데이터의 위치와 centroid의 위치를 유클리드 거리로 계산
-		// 미리 계산 했으므로 좀 있다가 없애기
 		for (j = 0; j < n_clusters; j++)
 			centroid_clustering[j] = euclideanDistance(data[i], centroid[j]);
 

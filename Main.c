@@ -33,7 +33,7 @@ int main(const int argc, const char* argv[])
 	int temp = 0;								// 중심점(centroid) 갯수
 	clock_t start, end;							// 소요시간 계산
 
-	srand((unsigned int)time(NULL));			// seed값 고정
+	//srand((unsigned int)time(NULL));			// seed값 고정
 
 	if (fopen_s(&csvOpen, argv[1], "r") != NULL)
 	{
@@ -64,12 +64,11 @@ int main(const int argc, const char* argv[])
 	centroid[0].x = data[temp].x;
 	centroid[0].y = data[temp].y;
 
-	// 새로운 K를 찾기 위한 반복
+	// 새로운 Centroid를 찾기 위한 반복
 	while (1) {
 		if (!(index = kmeans_pp_centroidnum(data, data_max_index, centroid, n_clusters)))
 			break;
-		n_clusters++;
-		centroid = realloc(centroid, sizeof(Centroid) * n_clusters);
+		centroid = realloc(centroid, sizeof(Centroid) * ++n_clusters);
 		centroid[n_clusters - 1].x = data[index].x;
 		centroid[n_clusters - 1].y = data[index].y;
 	}
