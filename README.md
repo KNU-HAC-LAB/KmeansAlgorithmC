@@ -19,6 +19,33 @@
 ##### 결과 2 (spotify-2023.csv)
 ![실행 결과 3](실행_결과_3.png)
 
+<table>
+    <tr>
+        <th> sepal.length </th>
+        <td> <img src="result_images/x_sepal.length_y_petal.length.png"> </td>
+        <td> <img src="result_images/x_sepal.length_y_sepal.width.png"> </td>
+        <td> <img src="result_images/x_sepal.length_y_petal.width.png"> </td>
+    </tr>
+    <tr>
+        <td> <img src="result_images/x_petal.length_y_sepal.length.png"> </td>
+        <th> petal.length</th>
+        <td> <img src="result_images/x_petal.length_y_sepal.width.png"> </td>
+        <td> <img src="result_images/x_petal.length_y_petal.width.png"> </td>
+    </tr>
+    <tr>
+        <td> <img src="result_images/x_sepal.width_y_sepal.length.png"> </td>
+        <td> <img src="result_images/x_petal.length_y_sepal.width.png"> </td>
+        <th> sepal.width </th>
+        <td> <img src="result_images/x_sepal.width_y_petal.width.png"> </td>
+    </tr>
+    <tr>
+        <td> <img src="result_images/x_petal.width_y_sepal.length.png"> </td>
+        <td> <img src="result_images/x_petal.width_y_petal.length.png"> </td>
+        <td> <img src="result_images/x_petal.width_y_sepal.width.png"> </td>
+        <th> petal.width </th>
+    </tr>
+</table>
+
 #### 4. 쿠다 사용 전과 후 비교
 <table style="text-align:center">
     <tr>
@@ -53,6 +80,7 @@
         <td> TBD </td>
     </tr>
 </table>
+
 
 || 파일 크기 |
 |:---:|:---:|
