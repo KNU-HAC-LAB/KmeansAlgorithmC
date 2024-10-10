@@ -24,6 +24,7 @@
     <tr>
         <th rowspan="2">데이터 셋</th>
         <th rowspan="2">데이터 양</th>
+        <th rowspan="2">실루엣 계수값</th>
         <th>사용 전</th>
         <th>사용 후</th>
     </tr>
@@ -33,24 +34,27 @@
     <tr> 
         <th> iris.csv </th>
         <td> 149 </td>
-        <td> 0.004000 </td>
-        <td>  </td>
+        <td> 0.274369 </td>
+        <td> 0.004 </td>
+        <td> TBD </td>
     </tr>
     <tr>
         <th> spotify-2023.csv </th>
         <td> 944 </td>
-        <td> 0.057000 </td>
-        <td>  </td>
+        <td> 0.297921 </td>
+        <td> 0.059 </td>
+        <td> TBD </td>
     </tr>
     <tr>
         <th> random_data.csv </th>
         <td> 10000 </td>
-        <td> 6.106000 </td>
-        <td>  </td>
+        <td> 0.285304 </td>
+        <td> 6.068 </td>
+        <td> TBD </td>
     </tr>
 </table>
 
 || 파일 크기 |
 |:---:|:---:|
 | CUDA 사용 전 | 91 KB |
-| CUDA 사용 후 | |
+| CUDA 사용 후 | TBD |
