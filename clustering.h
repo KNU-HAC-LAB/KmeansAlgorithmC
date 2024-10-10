@@ -13,13 +13,17 @@ typedef struct {
 } Centroid;
 
 // CSV에 있는 데이터를 배열로 옮기기
-int checkMaxIndex(const FILE* csvOpen);
+int total(const FILE* csvOpen);
 void fopenMalloc(const FILE* csvOpen, Point* data, const char* argv, const int selectX, const int selectY);
 void dataToArray(const char* str_tmp, const int x, const int y, Point* data, const int index);
 
 // kmeans++
 int kmeans_pp_centroidnum(const Point* data, const int max_index, const Centroid* centroid, const int n_clusters);
 float px_sum(const float* every_dx_square, const int max_index);
+
+// 정규화
+float min_max_represent(const float max_data, const float min_data, const float this_data);
+void data_represent(Point* data, Point* original, const int data_arr_max, Centroid* max_data, Centroid* min_data);
 
 // 클러스터링 코드
 void clustering(Point* data, const int data_arr_max, const Centroid* centroid, const int n_clusters);
@@ -43,6 +47,6 @@ float cluster_avg(int same_cluster, const Point choosen, const Point* data, cons
 float silhouette_calculate(const float first_silhoutte, const float second_silhoutte);
 
 // 결과 출력
-void result(const Point* data, const int data_arr_max, const Centroid* centroid, const int n_clusters, const int max_index);
+void result(const Point* data, Point* original, const int data_arr_max, const Centroid* centroid, const int n_clusters, const int max_index);
 
 #endif // !__KLUSTERING_H__

@@ -16,22 +16,25 @@
 #include "graphLocation.h"
 
 #define MAX_BUFFER 1024							// 읽을 최대 줄
-#define TERMINAL_MAX_SIZE 45
 
 void selectXY(const char* str_tmp);
 
 int main(const int argc, const char* argv[])
 {
 	FILE* csvOpen = NULL;
-	Point *data;								// 포인트 데이터 (동적할당)
+	Point* data;								// 포인트 데이터 (동적할당)
+	Point* original;
 	char str_tmp[MAX_BUFFER];					// 한 행의 최대 길이
 	int selectX, selectY;						// selectX = sepal length, selectY = sepal Width
-	int data_max_index = 0, i, index;			// data_max_index = 배열 data_max_index의 최대값
+	int data_max_index = 0, index;			// data_max_index = 배열 data_max_index의 최대값
 	int n_clusters = 1;							// 군집의 개수
 	Centroid* centroid, * centroid_before;		// 랜덤의 위치 생성할 Centroid, 복사할 Centroid
 	int refresh_times = 0;						// 갱신 횟수
 	int temp = 0;								// 중심점(centroid) 갯수
 	clock_t start, end;							// 소요시간 계산
+	Centroid max_data = { 0.0, 0.0 }, min_data = { MAX_BUFFER, MAX_BUFFER };		// Min-Max 정규화를 위한 변수
+	
+	//int l, k;									// Scalable K-means++를 위한 변수
 
 	srand((unsigned int)time(NULL));			// seed값 고정
 
@@ -51,12 +54,14 @@ int main(const int argc, const char* argv[])
 	selectX--;
 	selectY--;
 	
-	data_max_index = checkMaxIndex(csvOpen);
+	data_max_index = total(csvOpen);
 	data = (Point*)calloc(data_max_index + 1, sizeof(Point));
 	fopenMalloc(csvOpen, data, argv[1], selectX, selectY);
-
 	centroid = (Centroid*)calloc(n_clusters, sizeof(Centroid));
+	
 	start = clock();						// 총 소요시간 계산 시작
+	original = (Point*)calloc(data_max_index + 1, sizeof(Point));
+	data_represent(data, original, data_max_index, &max_data, &min_data);
 
 	// k-means++
 	// 무작위 선택되는 첫번째 중심점
@@ -73,7 +78,10 @@ int main(const int argc, const char* argv[])
 		centroid[n_clusters - 1].y = data[index].y;
 	}
 
-	printf("전체 데이터 수: %d, n_cluster: %d\n", data_max_index, n_clusters);
+	printf("전체 데이터 수: %d\n", data_max_index);
+	//printf("최종 clusters 수(k): \n");
+
+
 	// Centroid의 위치가 전 위치에 동일될 때까지 반복
 	while (1) {
 		centroid_before = centroid_copy(centroid, n_clusters);
@@ -85,9 +93,13 @@ int main(const int argc, const char* argv[])
 		free(centroid_before);
 	}
 
-	result(data, data_max_index, centroid, n_clusters, data_max_index);
+	result(data, original, data_max_index, centroid, n_clusters, data_max_index);
 	end = clock();							// 총 소요시간 계산 종료
 	printf("소요시간: %f 밀리초[ms]\n", (double)(end - start) / CLOCKS_PER_SEC);
+	free(data);
+	free(centroid_before);
+	free(centroid);
+
 
 	if (data_max_index <= 1500)
 	{
@@ -95,14 +107,12 @@ int main(const int argc, const char* argv[])
 		printf("데이터를 터미널에 그릴까요? (1을 입력 / 0으로 종료): ");
 		scanf("%d", &temp);
 		if (temp)
-			figurePointing(argv[1], data, data_max_index, n_clusters);
+			figurePointing(argv[1], original, data_max_index, n_clusters);
 	}
 	else
 		printf("데이터가 너무 많아 터미널에 모두 그릴 수가 없습니다.\n");
 
-	free(data);
-	free(centroid_before);
-	free(centroid);
+	free(original);
 	fclose(csvOpen);
 	return 0;
 }

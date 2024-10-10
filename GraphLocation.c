@@ -21,7 +21,6 @@ void figurePointing(const char* csv_name, const Point* data, const int data_arr_
 {
 	int i, j;
 	int coloring = 1;
-	float temp_x, temp_y;
 
 	terminalSize(TERMINAL_X_MAX, TERMINAL_Y_MAX);
 

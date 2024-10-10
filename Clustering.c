@@ -12,7 +12,7 @@
 #define MAX_BUFFER (1024)
 
 // stackoverflow를 방지하기 위해 data를 동적할당 하기
-int checkMaxIndex(FILE * csvOpen)
+int total(FILE * csvOpen)
 {
 	int max_index = 0;
 	char str_tmp[MAX_BUFFER];
@@ -273,14 +273,48 @@ float cluster_avg(int same_cluster, const Point choosen, const Point* data, cons
 	return avg;
 }
 
+// Min-Max 정규화 공식
+float min_max_represent(const float max_data, const float min_data, const float this_data)
+{
+	return (this_data - min_data) / (max_data - min_data);
+}
+// 정규화 데이터를 기존 데이터에 넣기
+void data_represent(Point* data, Point* original, const int data_arr_max, Centroid* max_data, Centroid* min_data)
+{
+	int i;
+
+	for (i = 0; i < data_arr_max; i++)
+	{
+		original[i].x = data[i].x;
+		original[i].y = data[i].y;
+
+		if (data[i].x > max_data->x)
+			max_data->x = data[i].x;
+		if (data[i].y > max_data->y)
+			max_data->y = data[i].y;
+
+		if (data[i].x < min_data->x)
+			min_data->x = data[i].x;
+		if (data[i].y < min_data->y)
+			min_data->y = data[i].y;
+	}
+
+	for (i = 0; i < data_arr_max; i++)
+	{
+		data[i].x = min_max_represent(max_data->x, min_data->x, data[i].x);
+		data[i].y = min_max_represent(max_data->y, min_data->y, data[i].y);
+	}
+}
+
 // 결과 출력
 void result(
 	const Point* data,
+	Point* original,
 	const int data_arr_max,
 	const Centroid* centroid,
 	const int n_clusters,
-	const int max_index)
-{
+	const int max_index
+){
 	int i, j, chooseone_sum = 0, theMaxCluster = 0;
 	int *sum = (int*)calloc(n_clusters, sizeof(int));
 	float* cluster_avg, max = MAX_NUM_FOR_MIN, avg = 0.0;
@@ -290,6 +324,7 @@ void result(
 	for (i = 0; i < data_arr_max; i++)
 	{
 		sum[data[i].centroid_num]++;	// 각 군집의 개체수
+		original[i].centroid_num = data[i].centroid_num;
 		cluster_avg = silhouette_Coefficient(i, data, data_arr_max, n_clusters);
 
 		for (j = 0; j < n_clusters; j++)
@@ -309,7 +344,7 @@ void result(
 	avg /= max_index;
 
 	for (i = 0; i < n_clusters; i++)
-		printf("군집 번호: %d (%.2f, %.2f). 개체수: %d\n", i + 1, centroid[i].x, centroid[i].y, sum[i]);
+		printf("군집 번호: %d. 개체수: %d\n", i + 1, sum[i]);
 	printf("실루엣 계수값: %f\n", avg);
 
 	free(pointSilhouette);
