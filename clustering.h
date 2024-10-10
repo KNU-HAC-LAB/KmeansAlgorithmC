@@ -23,7 +23,7 @@ float px_sum(const float* every_dx_square, const int max_index);
 
 // 정규화
 float min_max_represent(const float max_data, const float min_data, const float this_data);
-void data_represent(Point* data, Point* original, const int data_arr_max, Centroid* max_data, Centroid* min_data);
+void data_represent(Point* data, Point* original, const int data_arr_max);
 
 // 클러스터링 코드
 void clustering(Point* data, const int data_arr_max, const Centroid* centroid, const int n_clusters);

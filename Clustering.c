@@ -279,8 +279,9 @@ float min_max_represent(const float max_data, const float min_data, const float 
 	return (this_data - min_data) / (max_data - min_data);
 }
 // 정규화 데이터를 기존 데이터에 넣기
-void data_represent(Point* data, Point* original, const int data_arr_max, Centroid* max_data, Centroid* min_data)
+void data_represent(Point* data, Point* original, const int data_arr_max)
 {
+	Centroid max_data = { 0.0, 0.0 }, min_data = { MAX_BUFFER, MAX_BUFFER };		// Min-Max 정규화를 위한 변수
 	int i;
 
 	for (i = 0; i < data_arr_max; i++)
@@ -288,21 +289,21 @@ void data_represent(Point* data, Point* original, const int data_arr_max, Centro
 		original[i].x = data[i].x;
 		original[i].y = data[i].y;
 
-		if (data[i].x > max_data->x)
-			max_data->x = data[i].x;
-		if (data[i].y > max_data->y)
-			max_data->y = data[i].y;
+		if (data[i].x > max_data.x)
+			max_data.x = data[i].x;
+		if (data[i].y > max_data.y)
+			max_data.y = data[i].y;
 
-		if (data[i].x < min_data->x)
-			min_data->x = data[i].x;
-		if (data[i].y < min_data->y)
-			min_data->y = data[i].y;
+		if (data[i].x < min_data.x)
+			min_data.x = data[i].x;
+		if (data[i].y < min_data.y)
+			min_data.y = data[i].y;
 	}
 
 	for (i = 0; i < data_arr_max; i++)
 	{
-		data[i].x = min_max_represent(max_data->x, min_data->x, data[i].x);
-		data[i].y = min_max_represent(max_data->y, min_data->y, data[i].y);
+		data[i].x = min_max_represent(max_data.x, min_data.x, data[i].x);
+		data[i].y = min_max_represent(max_data.y, min_data.y, data[i].y);
 	}
 }
 

@@ -22,21 +22,18 @@ void selectXY(const char* str_tmp);
 int main(const int argc, const char* argv[])
 {
 	FILE* csvOpen = NULL;
-	Point* data;								// 포인트 데이터 (동적할당)
-	Point* original;
+	Point* data, * original;					// 포인트 데이터 (동적할당)
 	char str_tmp[MAX_BUFFER];					// 한 행의 최대 길이
 	int selectX, selectY;						// selectX = sepal length, selectY = sepal Width
-	int data_max_index = 0, index;			// data_max_index = 배열 data_max_index의 최대값
-	int n_clusters = 1;							// 군집의 개수
+	int data_max_index = 0, index;				// data_max_index = 배열 data_max_index의 최대값
 	Centroid* centroid, * centroid_before;		// 랜덤의 위치 생성할 Centroid, 복사할 Centroid
-	int refresh_times = 0;						// 갱신 횟수
-	int temp = 0;								// 중심점(centroid) 갯수
+	int n_clusters = 1;							// 군집의 개수
 	clock_t start, end;							// 소요시간 계산
-	Centroid max_data = { 0.0, 0.0 }, min_data = { MAX_BUFFER, MAX_BUFFER };		// Min-Max 정규화를 위한 변수
+	int temp = 0;
 	
 	//int l, k;									// Scalable K-means++를 위한 변수
 
-	srand((unsigned int)time(NULL));			// seed값 고정
+	//srand((unsigned int)time(NULL));			// seed값 고정
 
 	if (fopen_s(&csvOpen, argv[1], "r") != NULL)
 	{
@@ -61,7 +58,7 @@ int main(const int argc, const char* argv[])
 	
 	start = clock();						// 총 소요시간 계산 시작
 	original = (Point*)calloc(data_max_index + 1, sizeof(Point));
-	data_represent(data, original, data_max_index, &max_data, &min_data);
+	data_represent(data, original, data_max_index);
 
 	// k-means++
 	// 무작위 선택되는 첫번째 중심점
@@ -79,15 +76,13 @@ int main(const int argc, const char* argv[])
 	}
 
 	printf("전체 데이터 수: %d\n", data_max_index);
-	//printf("최종 clusters 수(k): \n");
-
+	//printf("희망 clusters 수(k): \n");
 
 	// Centroid의 위치가 전 위치에 동일될 때까지 반복
 	while (1) {
 		centroid_before = centroid_copy(centroid, n_clusters);
 		clustering(data, data_max_index, centroid, n_clusters);
 		toCentroidCenter(data, data_max_index, centroid, n_clusters);
-		refresh_times++;
 		if (checkDoesCentroidIsSameWithBefore(centroid, centroid_before, n_clusters))
 			break;
 		free(centroid_before);
@@ -100,10 +95,9 @@ int main(const int argc, const char* argv[])
 	free(centroid_before);
 	free(centroid);
 
-
 	if (data_max_index <= 1500)
 	{
-		// 포인터를 터미널에 그리기
+		// 포인터들을 터미널에 그리기
 		printf("데이터를 터미널에 그릴까요? (1을 입력 / 0으로 종료): ");
 		scanf("%d", &temp);
 		if (temp)
