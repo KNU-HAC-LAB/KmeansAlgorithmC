@@ -13,9 +13,9 @@ typedef struct {
 } Centroid;
 
 // CSV에 있는 데이터를 배열로 옮기기
-int total(const FILE* csvOpen);
-void fopenMalloc(const FILE* csvOpen, Point* data, const char* argv, const int selectX, const int selectY);
-void dataToArray(const char* str_tmp, const int x, const int y, Point* data, const int index);
+int total(FILE* csvOpen);
+void fopenMalloc(FILE* csvOpen, Point* data, const char* argv, const int selectX, const int selectY);
+void dataToArray(char* str_tmp, const int x, const int y, Point* data, const int index);
 
 // kmeans++
 int kmeans_pp_centroidnum(const Point* data, const int max_index, const Centroid* centroid, const int n_clusters);

@@ -17,7 +17,7 @@
 
 #define MAX_BUFFER 1024							// 읽을 최대 줄
 
-void selectXY(const char* str_tmp);
+void selectXY(char* str_tmp);
 
 int main(const int argc, const char* argv[])
 {
@@ -33,7 +33,7 @@ int main(const int argc, const char* argv[])
 	
 	//int l, k;									// Scalable K-means++를 위한 변수
 
-	//srand((unsigned int)time(NULL));			// seed값 고정
+	srand((unsigned int)time(NULL));			// seed값 고정
 
 	if (fopen_s(&csvOpen, argv[1], "r") != NULL)
 	{
@@ -70,7 +70,7 @@ int main(const int argc, const char* argv[])
 	while (1) {
 		if (!(index = kmeans_pp_centroidnum(data, data_max_index, centroid, n_clusters)))
 			break;
-		centroid = realloc(centroid, sizeof(Centroid) * ++n_clusters);
+		centroid = (Centroid*)realloc(centroid, sizeof(Centroid) * ++n_clusters);
 		centroid[n_clusters - 1].x = data[index].x;
 		centroid[n_clusters - 1].y = data[index].y;
 	}
@@ -111,7 +111,7 @@ int main(const int argc, const char* argv[])
 	return 0;
 }
 
-void selectXY(const char* str_tmp)
+void selectXY(char* str_tmp)
 {
 	char* token = strtok(str_tmp, ",");
 	int i = 0;

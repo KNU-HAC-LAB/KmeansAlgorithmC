@@ -26,7 +26,7 @@ int total(FILE * csvOpen)
 	return max_index;
 }
 
-void fopenMalloc(const FILE* csvOpen, Point* data, const char* argv, const int selectX, const int selectY)
+void fopenMalloc(FILE* csvOpen, Point* data, const char* argv, const int selectX, const int selectY)
 {
 	int max_index = 0;
 	char str_tmp[MAX_BUFFER];
@@ -44,7 +44,7 @@ void fopenMalloc(const FILE* csvOpen, Point* data, const char* argv, const int s
 
 // CSV에 있는 데이터를 배열로 옮기기
 void dataToArray(
-	const char* str_tmp,
+	char* str_tmp,
 	const int x,
 	const int y,
 	Point* data,
@@ -175,7 +175,7 @@ void toCentroidCenter(
 	Point* centroid_to_center = (Point*)calloc(n_clusters, sizeof(Point));
 	int i;
 
-	if (centroid_to_center == NULL) return -1;
+	if (centroid_to_center == NULL) return;
 
 	for (i = 0; i < data_arr_max; i++)
 	{
@@ -199,8 +199,6 @@ Centroid* centroid_copy(Centroid* centroid, const int n_clusters)
 {
 	Centroid* copy = (Centroid*)malloc(sizeof(Centroid) * n_clusters);
 	int i;
-
-	if (copy == NULL) return;
 
 	for (i = 0; i < n_clusters; i++)
 	{
