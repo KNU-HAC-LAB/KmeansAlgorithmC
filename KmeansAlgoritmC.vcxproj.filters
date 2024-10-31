@@ -21,21 +21,9 @@
     <ClCompile Include="Clustering.c">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="GraphLocation.c">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Terminal.c">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="clustering.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="graphLocation.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="terminal.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

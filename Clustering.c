@@ -97,9 +97,6 @@ int kmeans_pp_centroidnum(const Point* data, const int max_index, const Centroid
 	}
 	free(px);
 	
-	/*printf("big_num: %f, n_clusters - 1: %d, centroid[n_clusters - 1].x: %.f, centroid[n_clusters - 1].y: %.f, index: %d, data[index].x: %.f, data[index].y: %.f\n", 
-		big_num, n_clusters - 1, centroid[n_clusters - 1].x, centroid[n_clusters - 1].y, index, data[index].x, data[index].y);*/
-	
 	// 전의 centroid 위치와 동일하면 종료, 아니면 계속 반복하여 centroid를 만들기
 	for (i = 0; i < n_clusters; i++)
 	{

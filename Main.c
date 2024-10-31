@@ -12,8 +12,6 @@
 #include <time.h>
 
 #include "clustering.h"
-#include "terminal.h"
-#include "graphLocation.h"
 
 #define MAX_BUFFER 1024							// 읽을 최대 줄
 
@@ -30,7 +28,7 @@ int main(const int argc, const char* argv[])
 	int n_clusters = 1;							// 군집의 개수
 	clock_t start, end;							// 소요시간 계산
 	int temp = 0;
-	
+
 	//int l, k;									// Scalable K-means++를 위한 변수
 
 	srand((unsigned int)time(NULL));			// seed값 고정
@@ -50,12 +48,12 @@ int main(const int argc, const char* argv[])
 
 	selectX--;
 	selectY--;
-	
+
 	data_max_index = total(csvOpen);
 	data = (Point*)calloc(data_max_index + 1, sizeof(Point));
 	fopenMalloc(csvOpen, data, argv[1], selectX, selectY);
 	centroid = (Centroid*)calloc(n_clusters, sizeof(Centroid));
-	
+
 	start = clock();						// 총 소요시간 계산 시작
 	original = (Point*)calloc(data_max_index + 1, sizeof(Point));
 	data_represent(data, original, data_max_index);
@@ -89,23 +87,14 @@ int main(const int argc, const char* argv[])
 	}
 
 	result(data, original, data_max_index, centroid, n_clusters, data_max_index);
+
+	for (int i = 0; i < 20; i++)
+		printf("data[%d].x: %f, data[%d].y: %f, data[%d].centroid: %d\n", i, data[i].x, i, data[i].y, i, data[i].centroid_num);
 	end = clock();							// 총 소요시간 계산 종료
 	printf("소요시간: %f 밀리초[ms]\n", (double)(end - start) / CLOCKS_PER_SEC);
 	free(data);
 	free(centroid_before);
 	free(centroid);
-
-	if (data_max_index <= 1500)
-	{
-		// 포인터들을 터미널에 그리기
-		printf("데이터를 터미널에 그릴까요? (1을 입력 / 0으로 종료): ");
-		scanf("%d", &temp);
-		if (temp)
-			figurePointing(argv[1], original, data_max_index, n_clusters);
-	}
-	else
-		printf("데이터가 너무 많아 터미널에 모두 그릴 수가 없습니다.\n");
-
 	free(original);
 	fclose(csvOpen);
 	return 0;
